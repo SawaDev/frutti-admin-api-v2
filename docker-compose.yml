@@ -1,0 +1,47 @@
+services:
+  mysqldb:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on:
+      - mysqldb
+    container_name: pma
+    restart: always
+    env_file: .env
+    ports:
+      - $PHPMYADMIN_LOCAL_PORT:$PHPMYADMIN_DOCKER_PORT
+    environment:
+      - PMA_ARBITRARY=0
+
+  app:
+    container_name: app
+    depends_on:
+      - mysqldb
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DB_NAME=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:

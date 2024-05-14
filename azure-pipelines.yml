@@ -1,0 +1,55 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - main
+
+variables:
+  majorVersion: 1
+  minorVersion: 0
+
+pool:
+  vmImage: ubuntu-latest
+
+name: $(majorVersion).$(minorVersion).$(Rev:r)
+
+steps:
+#  - task: SonarCloudPrepare@1
+#    inputs:
+#      SonarCloud: 'SonarCloud'
+#      organization: 'bellissimouz'
+#      scannerMode: 'CLI'
+#      configMode: 'manual'
+#      cliProjectKey: 'BellissimoUz_mystery-shopper-api'
+#      cliProjectName: 'mystery-shopper-api'
+#      cliSources: '.'
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'
+    displayName: 'Install Node.js'
+
+  - task: EnvTransform@0
+    inputs:
+      inputType: 'file'
+      inputFile: '$(Build.SourcesDirectory)/.env.release'
+      outputFile: '$(Build.ArtifactStagingDirectory)/.env'
+
+#  - task: SonarCloudAnalyze@1
+#  - task: SonarCloudPublish@1
+#    inputs:
+#      pollingTimeoutSec: '300'
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: $(Build.SourcesDirectory)
+      Contents: '**'
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+
+  # Publish build artifacts
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: mystery-shopper-api.$(Build.BuildNumber)

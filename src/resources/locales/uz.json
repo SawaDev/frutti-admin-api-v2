@@ -1,0 +1,17 @@
+{
+  "common": {
+    "in_a_restaurant": "restoranda",
+    "for_delivery": "etkazib berish uchun",
+    "promocode_restaurant": "istalgan katta pitsaga (hot-dog bordlarsiz) restoranda amal qiladigan promo-kod",
+    "promocode_delivery": "istalgan o‘rtacha pitsaga (hot-dog bordlarsiz) yetkazib berishga promo-kod"
+  },
+  "notifications": {
+    "success_registered": "Assalomu aleykum! Siz tekshiruvga muvaffaqiyatli yozildingiz. Sizning {{type}} tekshiruvingiz {{date}} sanasiga belgilandi.",
+    "remind_tomorrow": "Assalomu alaykum! Ertaga {{date}} sizda {{type}} tekshiruv belgilanganini eslatib o‘tamiz",
+    "remind_today": "Assalomu alaykum! Bugun sizda {{type}} tekshiruv belgilangan, qoida va tavsiyalar bilan havola orqali tanishishingiz mumkin {{{link}}}. Yoqimli ishtaha!",
+    "reviewing_report": "Qatnashganingiz uchun rahmat! Sizning hisobotingizni ko‘rib chiqmoqdamiz, bu jarayon tugasa, siz bilan aloqaga chiqamiz",
+    "confirmed_report": "Tabriklaymiz, sizning hisobotingiz to‘g‘ri tuzilgan, brendimizni rivojlantirishga qo‘shgan hissangiz uchun minnatdorchilik sifatida {{type}} sovg‘a qilamiz.Sizga berilgan promo-kodni ko‘chirib oling va buyurtma berish paytida ishlating. Promo-kodni faqat bir marta ishlatish mumkin. Sizga omad tilaymiz va keyingi tekshiruvlarda kutamiz.",
+    "rejected_report": "Brendimiz rivojiga qo‘shgan hissangiz uchun rahmat, afsuski, sizning hisobotingiz to‘liq emas edi, siz qoidalarga rioya qilmadingiz, shuning uchun sizga to‘liq rag‘batlantirish bera olmaymiz. Lekin sizning sarflagan vaqtingiz va kuchingizni qadrlaymiz, shuning uchun sizga 8 dona sinnamon rollariga promo-kod sovg‘a qilamiz. Sizga omad tilaymiz va keyingi tekshiruvlarda kutamiz.",
+    "canceled_application": "Hurmatli mijoz, afsuski, biz texnik sabablarga ko'ra {{terminal}} filialda uning yopilganligi sababli, {{date}} da rejalashtirilgan tekshiruvni bekor qilishga majburmiz. Sizga yetkazilgan noqulayliklar uchun samimiy uzr so'raymiz. Boshqa tekshiruvga quyidagi havoladan o’tgan holda yozilishingiz mumkin: {{{link}}}"
+  }
+}
