@@ -2,7 +2,7 @@
   "name": "admin-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/bin/www.js",
+  "main": "dist/index.js",
   "_moduleAliases": {
     "@root": "./",
     "app": "dist/app",
