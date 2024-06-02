@@ -2,9 +2,7 @@ import { Post } from "app/models/Post"
 import { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import { updateObjectById } from "utils/functions";
-import { v4 } from "uuid"
-
-const uuid = v4();
+import { v4 as uuidv4 } from "uuid"
 
 export default {
   Create: async (req: Request, res: Response) => {
@@ -69,7 +67,7 @@ export default {
           return res.status(404).send({ success: false, message: 'Post not found' });
         }
 
-        const shortUuid = uuid.replace(/-/g, '').substring(0, 8);
+        const shortUuid = uuidv4().replace(/-/g, '').substring(0, 8);
 
         if (data) {
           existingPost.details.push({
@@ -135,8 +133,54 @@ export default {
     }
   },
 
+  CopyDetail: async (req: Request, res: Response) => {
+    try {
+      const data = req.body;
+      const { id, detailId } = req.params;
+
+      const trx = await Post.startTransaction();
+
+      try {
+        const existingPost = await Post.query(trx).findById(id).forUpdate();
+
+        const targetDetail = existingPost?.details.find(detail => detail.id === detailId)
+
+        if (!existingPost) {
+          await trx.rollback();
+          return res.status(404).send({ success: false, message: `Post with id ${id} not found` });
+        }
+
+        if (!targetDetail?.image) return res.status(StatusCodes.BAD_REQUEST).send({ success: false, message: "Image not found" })
+
+        const newDetails = Array.from({ length: data.count }).map((_) => ({
+          ...targetDetail,
+          id: uuidv4().replace(/-/g, '').substring(0, 8),
+        }));
+
+        existingPost.details.push(...newDetails);
+
+        await existingPost.$query(trx).patch({
+          details: existingPost.details,
+        });
+
+        const updatedPost = await Post.query(trx)
+          .select('id', 'name', 'description', 'published', 'details', 'created_at', 'updated_at')
+          .findById(id);
+
+        await trx.commit();
+
+        return res.send({ success: true, data: updatedPost });
+      } catch (error) {
+        await trx.rollback();
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ success: false, message: 'Internal server error' });
+      }
+    } catch (error) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ success: false, message: 'Internal server error' });
+    }
+  },
+
   GetAll: async (req: Request, res: Response) => {
-    const posts = await Post.query().select("id", "created_at", "name", "published", "description")
+    const posts = await Post.query().select("id", "created_at", "name", "published", "description", "details")
     return res.send({ success: true, data: posts })
   },
 
@@ -188,4 +232,65 @@ export default {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ success: false, message: 'Internal server error' });
     }
   },
+
+  CreateMany: async (req: Request, res: Response) => {
+    const dataArray = req.body;
+    const createdPosts: Post[] = [];
+
+    for (const data of dataArray) {
+      const post = await Post.query().insertAndFetch(data);
+      createdPosts.push(post);
+    }
+
+    return res.send({ success: true, data: createdPosts });
+  },
+
+  CreateManyDetail: async (req: Request, res: Response) => {
+    try {
+      const postsData = req.body;
+
+      const trx = await Post.startTransaction();
+
+      try {
+        const updatedPosts: (Post | undefined)[] = [];
+
+        for (const postData of postsData) {
+          const { id, details } = postData;
+
+          const existingPost = await Post.query(trx).findById(id).forUpdate();
+
+          if (!existingPost) {
+            await trx.rollback();
+            return res.status(404).send({ success: false, message: `Post with id ${id} not found` });
+          }
+
+          const newDetails = details.map(detail => ({
+            id: uuidv4().replace(/-/g, '').substring(0, 8),
+            ...detail
+          }));
+
+          existingPost.details.push(...newDetails);
+
+          await existingPost.$query(trx).patch({
+            details: existingPost.details,
+          });
+
+          const updatedPost = await Post.query(trx)
+            .select('id', 'name', 'description', 'published', 'details', 'created_at', 'updated_at')
+            .findById(id);
+
+          updatedPosts.push(updatedPost);
+        }
+
+        await trx.commit();
+
+        return res.send({ success: true, data: updatedPosts });
+      } catch (error) {
+        await trx.rollback();
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ success: false, message: 'Internal server error' });
+      }
+    } catch (error) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ success: false, message: 'Internal server error' });
+    }
+  }
 }
