@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc & node .",
-    "dev": "tsc -w & nodemon .",
+    "dev": "tsc & nodemon .",
     "test:unit": "ENV_FILE=./.env.test jest --detectOpenHandles --config=jest.config.js"
   },
   "dependencies": {

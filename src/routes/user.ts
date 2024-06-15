@@ -1,11 +1,13 @@
 import express from "express"
 import {useErrorHandler} from "utils/useErrorHandler"
 import UserController from "controllers/UserController"
+import { validateData } from "app/middleware/validation.middeleware"
+import { createUserSchema } from "app/schemas/userSchema"
 
 const router = express.Router()
 
 // Create user
-router.post("/", UserController.UserRegistrationValidate, useErrorHandler(UserController.Create))
+router.post("/", validateData(createUserSchema), useErrorHandler(UserController.Create))
 // get all users
 router.get("/", useErrorHandler(UserController.GetAll))
 // update user

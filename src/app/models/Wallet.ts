@@ -1,8 +1,8 @@
 import Model from "config/knex.config"
 import moment from "moment"
 
-export class Client extends Model {
-    static tableName = "client"
+export class Wallet extends Model {
+    static tableName = "wallet"
     static hidden = ["updated_at"]
 
     id: number
