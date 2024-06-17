@@ -10,6 +10,7 @@ import userRouter from "routes/user"
 import postRouter from "routes/post"
 import uploadRouter from "routes/upload"
 import clientRouter from "routes/client"
+import walletRouter from "routes/wallet"
 import errorConfig from "config/error.config"
 import i18n from "config/i18n.config"
 import { corsConfig } from "config/cors.config"
@@ -32,6 +33,7 @@ app.use("/api/users", verifyToken, userRouter)
 app.use("/api/posts", verifyToken, postRouter)
 app.use("/api/upload", verifyToken, uploadRouter)
 app.use("/api/clients", verifyToken, clientRouter)
+app.use("/api/wallets", verifyToken, walletRouter)
 
 app.use(errorConfig.logErrors)
 app.use(errorConfig.clientErrorHandler)

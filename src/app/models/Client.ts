@@ -4,6 +4,7 @@ import moment from "moment"
 export class Client extends Model {
     static tableName = "client"
     static hidden = ["updated_at"]
+    static jsonAttributes = ["balance"]
 
     id: number
     name: string
