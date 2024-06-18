@@ -4,6 +4,7 @@ import moment from "moment"
 export class Transaction extends Model {
     static tableName = "transaction"
     static hidden = ["updated_at"]
+    static jsonAttributes = ["wallet_id", "sale_id", "client_id", "amount", "distribution"]
 
     id: number
     wallet_id: number

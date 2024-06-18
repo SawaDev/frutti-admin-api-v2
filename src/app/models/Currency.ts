@@ -4,10 +4,12 @@ import moment from "moment"
 export class Currency extends Model {
     static tableName = "currency"
     static hidden = ["updated_at"]
+    static jsonAttributes = ["distribution"]
 
     id: number
     name: string
     distribution: number
+    symbol: string | null
     
     created_at: string
     updated_at: string

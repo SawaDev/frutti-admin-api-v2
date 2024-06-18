@@ -1,20 +1,18 @@
 import express from "express"
 import {useErrorHandler} from "utils/useErrorHandler"
-import { validateData } from "app/middleware/validation.middeleware"
-import { createWalletSchema } from "app/schemas/walletSchema"
 import WalletController from "app/controllers/WalletController"
 
 const router = express.Router()
 
-// Create wallet
-router.post("/", validateData(createWalletSchema), useErrorHandler(WalletController.Create))
-// get all wallets
+// Create currency
+router.post("/", useErrorHandler(WalletController.Create))
+// get all currencies
 router.get("/", useErrorHandler(WalletController.GetAll))
-// update wallet
+// update currency
 router.patch("/:id", useErrorHandler(WalletController.Update))
-// get wallet by id
+// get currency by id
 router.get("/:id", useErrorHandler(WalletController.Get))
-// delete wallet
+// delete currency
 router.delete("/:id", useErrorHandler(WalletController.Delete))
 
 export default router
