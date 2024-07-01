@@ -1,22 +1,18 @@
 import Model from "config/knex.config"
 import moment from "moment"
-import { Sale } from "./Sale"
-import { Client } from "./Client"
 import { Wallet } from "./Wallet"
+import { ExpenseCategory } from "./ExpenseCategory"
 
-export class Transaction extends Model {
-    static tableName = "transaction"
+export class Expense extends Model {
+    static tableName = "expense"
     static hidden = ["updated_at"]
-    static jsonAttributes = ["wallet_id", "sale_id", "client_id", "amount", "distribution"]
+    static jsonAttributes = ["wallet_id", "category_id", "amount"]
 
     id: number
     wallet_id: number
-    sale_id: number | null
-    client_id: number | null
-    type: "cash" | "card"
+    category_id: number | null
     amount: number
-    distribution: number | null
-    currency_name: string | null
+    comment: string | null
     
     created_at: string
     updated_at: string
@@ -31,28 +27,20 @@ export class Transaction extends Model {
     }
 
     static relationMappings = {
-        sale: {
-            relation: Model.BelongsToOneRelation,
-            modelClass: Sale,
-            join: {
-                from: 'transaction.sale_id',
-                to: 'sale.id',
-            },
-        },
         wallet: {
             relation: Model.BelongsToOneRelation,
             modelClass: Wallet,
             join: {
-                from: 'transaction.wallet_id',
+                from: 'expense.wallet_id',
                 to: 'wallet.id',
             },
         },
-        client: {
+        expense_category: {
             relation: Model.HasOneRelation,
-            modelClass: Client,
+            modelClass: ExpenseCategory,
             join: {
-                from: 'transaction.client_id',
-                to: 'client.id',
+                from: 'expense.category_id',
+                to: 'expense_category.id',
             },
         },
     };

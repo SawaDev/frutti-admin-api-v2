@@ -1,18 +1,18 @@
 import express from "express"
 import {useErrorHandler} from "utils/useErrorHandler"
-import WalletController from "app/controllers/WalletController"
+import CurrencyController from "app/controllers/CurrencyController"
 
 const router = express.Router()
 
 // Create currency
-router.post("/", useErrorHandler(WalletController.Create))
+router.post("/", useErrorHandler(CurrencyController.Create))
 // get all currencies
-router.get("/", useErrorHandler(WalletController.GetAll))
+router.get("/", useErrorHandler(CurrencyController.GetAll))
 // update currency
-router.patch("/:id", useErrorHandler(WalletController.Update))
+router.patch("/:id", useErrorHandler(CurrencyController.Update))
 // get currency by id
-router.get("/:id", useErrorHandler(WalletController.Get))
+router.get("/:id", useErrorHandler(CurrencyController.Get))
 // delete currency
-router.delete("/:id", useErrorHandler(WalletController.Delete))
+router.delete("/:id", useErrorHandler(CurrencyController.Delete))
 
 export default router

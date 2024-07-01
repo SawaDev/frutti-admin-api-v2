@@ -12,6 +12,8 @@ import uploadRouter from "routes/upload"
 import clientRouter from "routes/client"
 import walletRouter from "routes/wallet"
 import currencyRouter from "routes/currency"
+import transactionRouter from "routes/transaction"
+import expenseRouter from "routes/expense"
 import errorConfig from "config/error.config"
 import i18n from "config/i18n.config"
 import { corsConfig } from "config/cors.config"
@@ -36,6 +38,8 @@ app.use("/api/upload", verifyToken, uploadRouter)
 app.use("/api/clients", verifyToken, clientRouter)
 app.use("/api/wallets", verifyToken, walletRouter)
 app.use("/api/currencies", verifyToken, currencyRouter)
+app.use("/api/transactions", verifyToken, transactionRouter)
+app.use("/api/expenses", verifyToken, expenseRouter)
 
 app.use(errorConfig.logErrors)
 app.use(errorConfig.clientErrorHandler)

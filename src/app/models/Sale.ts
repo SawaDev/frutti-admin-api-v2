@@ -1,5 +1,6 @@
 import Model from "config/knex.config"
 import moment from "moment"
+import { Client } from "./Client"
 
 export class Sale extends Model {
     static tableName = "sale"
@@ -7,7 +8,7 @@ export class Sale extends Model {
     static jsonAttributes = ["sale_id", "total_price", "payment_received", "distribution"]
 
     id: number
-    sale_id: number
+    client_id: number
     total_price: number
     payment_received: number
     distribution: number | null
@@ -24,4 +25,15 @@ export class Sale extends Model {
     $beforeUpdate() {
         this.updated_at = moment().format("YYYY-MM-DD HH:mm:ss")
     }
+
+    static relationMappings = {
+        client: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: Client,
+            join: {
+                from: 'transaction.client_id',
+                to: 'client.id',
+            },
+        },
+    };
 }
